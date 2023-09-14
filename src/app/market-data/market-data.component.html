@@ -1,0 +1,48 @@
+<!-- <app-root>
+  <button (click)="sendMessage()">Send Message</button>
+
+  <ul>
+    <li *ngFor="let message of receivedMessages">{{ message }}</li>
+  </ul>
+</app-root> -->
+<h1>Market-Data</h1>
+<table datatable [dtOptions]="dtOptions" class="row-border hover">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>LT</th>
+            <th>Bid</th>
+            <th>Offer</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Volume</th>
+            <th>%Chg</th>
+            <th>Close</th>
+            <th>Bid Qty</th>
+            <th>Offer Qty</th>
+            <th>TT</th>
+            <th>L Qty</th>
+            <th>Chg</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let scrip of scrips">
+            <td>{{scrip.company}}</td>
+            <td>{{scrip.lastTraded}}</td>
+            <td>{{scrip.bid}}</td>
+            <td>{{scrip.offer}}</td>
+            <td>{{scrip.open}}</td>
+            <td>{{scrip.high}}</td>
+            <td>{{scrip.low}}</td>
+            <td>{{scrip.volume}}</td>
+            <td>{{scrip.percentageChange}}</td>
+            <td>{{scrip.close}}</td>
+            <td>{{scrip.bidQty}}</td>
+            <td>{{scrip.offerQty}}</td>
+            <td>{{scrip.totalTrade}}</td>
+            <td>{{scrip.lastQty}}</td>
+            <td>{{scrip.change}}</td>
+        </tr>
+    </tbody>
+</table>

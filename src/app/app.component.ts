@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from './websocket.service';
 import { HttpClient } from '@angular/common/http';
+import { Scrip } from './scrip';
 @Component({
   selector: 'app-root',
   // template: `
@@ -13,9 +14,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'datatables';
-  dtOptions: DataTables.Settings = {};
-  posts;
+
   receivedMessages: string[] = [];
   constructor(private websocketService: WebsocketService, private http: HttpClient) { }
 
@@ -24,17 +23,7 @@ export class AppComponent implements OnInit {
     this.websocketService.messageReceived.subscribe((message: string) => {
       this.receivedMessages.push(message);
     });
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5,
-      processing: true
-    }
-    this.http.get('http://jsonplaceholder.typicode.com/posts')
-      .subscribe(posts => {
-        this.posts = posts;
-      });
   }
-
   sendMessage(): void {
     const message = '115{"AUTHVER":"10","LOGINIP":"","CLVER":"1.0.0","PDM":"56","LAN":"EN","METAVER":"0","SSOTOK":"DEMO1UNI","SSOTYPE":"2"}';
     this.websocketService.sendMessage(message);

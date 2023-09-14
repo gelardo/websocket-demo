@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-
+import { Scrip } from './scrip';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +17,9 @@ export class WebsocketService {
     exchangeExtension: 'PB',
     selectedScrip: 'AAMRANET'
   }
+  public scripData: Scrip;
+  scrips: Scrip[] = [];
+
   private socket: ReconnectingWebSocket;
   messageReceived: Subject<string> = new Subject<string>();
   constructor() { }
@@ -64,6 +67,43 @@ export class WebsocketService {
       const message = event.data;
       // console.log('Received message:', message);
       this.messageReceived.next(message);
+      const index = event.data.indexOf('{')
+      const ndata = event.data.substring(index)
+      const json = JSON.parse(ndata)
+      // console.log(json);
+      if (
+        json['1'] === 194 &&
+        json.sym.includes('PB')
+      ) {
+        this.addToScrip(
+          {
+            company: json.sym.slice(0, -3),
+            lastTraded: 0,
+            bid: 0,
+            offer: 0,
+            open: 0,
+            high: 0,
+            low: 0,
+            volume: 0,
+            percentageChange: 0,
+            close: 0,
+            bidQty: 0,
+            offerQty: 0,
+            totalTrade: 0,
+            lastQty: 0,
+            change: 0,
+          }
+        )
+      }
+      // if (
+      //   json['1'] === 3 &&
+      //   json.sym.includes('`PB')
+      // ) {
+      //   this.updataScrip({
+      //     company: json.sym.slice(0, -3),
+      //     lastTraded: json.
+      //   })
+      // }
     };
 
     this.socket.onclose = (event) => {
@@ -78,7 +118,13 @@ export class WebsocketService {
   sendMessage(message: string): void {
     this.socket.send(message);
   }
+  addToScrip(scrip: Scrip) {
+    this.scrips.push(scrip)
+    localStorage.setItem('scrips', JSON.stringify(this.scrips));
+  }
+  updataScrip(scrip: Scrip) {
 
+  }
   closeConnection(): void {
     this.socket.close();
   }
